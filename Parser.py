@@ -1,10 +1,10 @@
 from bs4 import BeautifulSoup
-from Bdd import *
 import re
 
 class Parser:
-	def __init__(self, content):
+	def __init__(self, content, url):
 		self.content = content
+		self.url = url
 	
 	def cleanAndRun(self):
 		if(self.cleaner()):
@@ -33,7 +33,7 @@ class Parser:
 		except:
                         pass ##print "fail further reading"
 
-		self.content = self.content.replace(" (page does not exist)", "")
+		self.content = self.content.replace(" (page does not exist)", "").replace("list of ", "").replace("List of ", "").replace("lists of ", "").replace("Lists of ", "")
 		try:
 			self.content = self.content[:min(pEnd)]
 		except:
@@ -48,13 +48,21 @@ class Parser:
                         if(a.has_attr('title') and (a['title'][:4] != "Edit")):
                                 data.append(a['title'])
 
-		data = list(set(data))	
-		o = "["
-		for x in data:
-			if x.find(":") == -1:
-				o += str('"' + re.sub(r' \([^)]*\)', '', x.encode('utf-8')) + '", ')
-		o = o[:-2] + "],"
-		o.replace(" (page does not exist)", "")
-		outputF = open("output.txt", "a")
-		outputF.write(o)
-		print "file written"
+		data = list(set(data))
+		uclean = self.urlLastPart()
+		if(uclean.find("Wiki") == -1):
+			o = str('\t\t"' + uclean + '" : [')
+			for x in data:
+				if x.find(":") == -1:
+					o += str('"' + re.sub(r' \([^)]*\)', '', x.encode('utf-8')) + '", ')
+			o = o[:-2] + "],\n"
+			o.replace(" (page does not exist)", "")
+			outputF = open("output.json", "a")
+			outputF.write(o)
+			outputF.close()
+			print uclean
+
+	def urlLastPart(self):
+		ind = (self.url.rindex("/") + 1)
+		u = self.url[ind:].encode('utf-8').replace("_", " ")
+		return u
