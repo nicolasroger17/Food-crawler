@@ -14,8 +14,8 @@ class Crawler:
 			a = BeautifulSoup(str(a)).a
 			if(a.has_attr('href') and (a['href'][:5] == "/wiki")):
 				u = str(self.urlPrefix + a['href'])
-				Parser(requests.get(u).content).parse()
-				Crawler(u).parseForLinks()
+				p = Parser(requests.get(u).content)
+				p.cleanAndRun()
 
 def find_nth(haystack, needle, n):
 	start = haystack.find(needle)
