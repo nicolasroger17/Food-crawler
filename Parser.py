@@ -19,19 +19,19 @@ class Parser:
 		try:
 			pEnd.append(self.content.rindex('<h2><span class="mw-headline" id="See_also">'))
 		except:
-			print "fail see also"
+			pass ##print "fail see also"
 		try:
 			pEnd.append(self.content.rindex('<h2><span class="mw-headline" id="References">'))
 		except:
-                        print "fail references"
+                        pass ##print "fail references"
                 try:
 			pEnd.append(self.content.rindex('<h2><span class="mw-headline" id="External_links">'))
 		except:
-                        print "fail external links"
+                        pass ##print "fail external links"
                 try:
 			pEnd.append(self.content.rindex('<h2><span class="mw-headline" id="Further_reading">'))
 		except:
-                        print "fail further reading"
+                        pass ##print "fail further reading"
 
 		self.content = self.content.replace(" (page does not exist)", "")
 		try:
