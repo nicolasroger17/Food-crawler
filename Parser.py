@@ -8,7 +8,7 @@ class Parser:
 	
 	def cleanAndRun(self):
 		if(self.cleaner()):
-			self.parse()
+			return self.parse()
 
 	def cleaner(self):
 		try:
@@ -49,18 +49,18 @@ class Parser:
                                 data.append(a['title'])
 
 		data = list(set(data))
+
 		uclean = self.urlLastPart()
+		m = {}
+		tab = []
 		if(uclean.find("Wiki") == -1):
-			o = str('\t\t"' + uclean + '" : [')
 			for x in data:
 				if x.find(":") == -1:
-					o += str('"' + re.sub(r' \([^)]*\)', '', x.encode('utf-8')) + '", ')
-			o = o[:-2] + "],\n"
-			o.replace(" (page does not exist)", "")
-			outputF = open("output.json", "a")
-			outputF.write(o)
-			outputF.close()
+					tab.append(re.sub(r' \([^)]*\)', '', x.replace(" (page does not exist)", "")).encode('utf-8'))
 			print uclean
+			m[uclean] = tab
+			return m
+		return False
 
 	def urlLastPart(self):
 		ind = (self.url.rindex("/") + 1)
