@@ -23,7 +23,7 @@ class Crawler:
 					dico = dict(dico.items() + d.items())
 
 		f = open('output.json', 'w')
-		f.write(json.dumps(dico))
+		f.write(json.dumps(dico, sort_keys=True, indent=4, separators=(',', ': ')))
 		f.close()
 
 def find_nth(haystack, needle, n):
